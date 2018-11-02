@@ -1,4 +1,4 @@
-  /*
+        /*
 	  Jason Wang, Brian Tran, Timmy Ngo
 	  January 8, 2015
 	  This program simulates a robot that uses a LDR sensors to traverse and find its way through a maze.

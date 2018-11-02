@@ -1,0 +1,130 @@
+  /*
+	  Jason Wang, Brian Tran, Timmy Ngo
+	  January 8, 2015
+	  This program simulates a robot that uses a LDR sensors to traverse and find its way through a maze.
+	*/
+	
+
+	/* Analog port variable to get LDR reading */
+	int LDR = A0;
+  
+	/* Stores pin for LED.*/
+	int LED = 2;
+	
+  /* Variable to store upper range of the black reading
+	int upper = 1000;
+  
+  /* Variable to store lower range of the black reading
+	int lower = 580; 
+	
+
+	/* These variables are for the separate pins. m1 is for the first motor, m2 is for the second motor. p1 represents forward and p2 represents backwards. */
+	int m1p1 = 5;
+	int m1p2 = 6; 
+	int m2p1 = 9; 
+	int m2p2 = 10;
+	  
+    
+	/* This variable is the speed of the robot. */
+	int speed = 120;
+	
+  
+	/* Setting up Arduino inputs and outputs. */
+	void setup()
+  {
+	  Serial.begin (9600); //turns on the Serial
+	  pinMode(LDR, INPUT); 
+	  pinMode(m1p1, OUTPUT);
+	  pinMode(m1p2, OUTPUT);
+	  pinMode(m2p1, OUTPUT);
+	  pinMode(m2p1, OUTPUT);
+	  pinMode(LED, OUTPUT);
+	}
+
+
+	/* Method for sensing black line. */
+	boolean black()
+  {
+	  if (inRange(reading()))
+	     return true; //check for correct range. 
+	   return false;
+	}
+
+
+	/* Method to verify correct range of LDR. */
+	boolean inRange(int a)
+  {
+	  if (a <= upper && a >= lower){
+	      return true;
+	  }
+	  return false;
+	}
+	
+  
+	/* Method for LDR sensor reading. */
+	int reading()
+  {
+	 return analogRead(LDR); 
+	}
+  
+
+	/* Method for LDR reading output.*/
+	void output()
+  {
+	  int read = analogRead(LDR);
+	  Serial.print("LDR reading: ");
+	  Serial.println(read); 
+	  delay(10);
+	}
+	
+	/* Left turn method.*/
+	void left()
+  {
+	   analogWrite(m1p1, 0); // set pin 2 low 
+	   analogWrite(m1p2, speed); // set pin 7 high
+	        
+	   analogWrite(m2p1, speed); 
+	   analogWrite(m2p2, 0); // set pin 7 high
+	    
+	}
+  
+  
+  /* Right turn method. */
+	void right()
+  {
+	   analogWrite(m1p1, 0); // set pin 2 low
+	   analogWrite(m1p2, 0 ); // set pin 7 high
+	        
+	   analogWrite(m2p1, 0); // set pin 2 low
+	   analogWrite(m2p2, speed ); // set pin 7 high
+	   
+	}
+  
+  
+	/* Traverse straight method.  */
+	void straight()
+  {
+	   analogWrite(m1p1, 0); // set pin 2 low
+	   analogWrite(m1p2, speed); // set pin 7 high
+	   
+	   analogWrite(m2p1, 0); // set pin 2 low
+	   analogWrite(m2p2, speed); // set pin 7 high
+	}
+		
+
+	/* Looping method
+	   Target logic: Turn left while on black, and turn right while on white.*/
+	void loop()
+  {
+	  //output();
+	 while(black()){
+	     left(); 
+	  }
+	  delay(50);
+	  while(!black()){
+	     right(); //right speed of 120
+	  }
+	  straight(); //straight speed of 120
+	  delay(15); 
+	}
+
